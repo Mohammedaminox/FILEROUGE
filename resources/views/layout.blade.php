@@ -4,11 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BELLEVUE</title>
+    <title>Evento</title>
     <link rel="shortcut icon" type="image/png" href="Pback/assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="Pback/assets/css/styles.min.css" />
     <!-- Option 1: Include in HTML -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="Pback/assets/js/sidebarmenu.js" />
     <style>
         #header2 {
             width: 100%;
@@ -63,7 +64,7 @@
                 <div class="brand-logo d-flex align-items-center justify-content-between">
                     <a href="./index.html" class="text-nowrap logo-img">
                         <span class="navbar-brand logo">
-                            BELLEVUE
+                            Evento
                         </span>
                     </a>
                     <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
@@ -159,7 +160,7 @@
                                 <span class="hide-menu">Logout</span>
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="" method="POST" style="display: none;">
                                 @csrf
                             </form>
 
@@ -229,6 +230,7 @@
                     </div>
                 </nav>
             </header>
+
 
 
             @yield('content')
