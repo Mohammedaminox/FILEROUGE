@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->decimal('price', 8, 2);
-            // Additional service details can be added here
+            $table->string('name'); // Field to store service name
+            $table->string('icon_class'); // Field to store icon class name
             $table->timestamps();
         });
     }
