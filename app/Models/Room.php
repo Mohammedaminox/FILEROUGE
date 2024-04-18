@@ -21,6 +21,7 @@ class Room extends Model
         'check_in_date',
         'check_out_date',
         'category_id',
+        'service_id',
         'user_id',
     ];
     
@@ -33,5 +34,10 @@ class Room extends Model
     public function categories()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_id');
     }
 }
