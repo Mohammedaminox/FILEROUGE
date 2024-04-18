@@ -1,6 +1,7 @@
 @extends('layout')
 
 @section('content')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -41,15 +42,7 @@
                         <div class="col-3">
                             <b>Categorie:</b> {{ $room->categories->name }}
                         </div>
-                        <!-- <div class="col-2">
-                            <b>Places:</b> {{ $event->places }}
-                        </div>
-                        <div class="col-3">
-                            <b>Location:</b> {{ $event->location }}
-                        </div>
-                        <div class="col-4 mb-2">
-                            <b>Date:</b> {{ $event->date }}
-                        </div> -->
+
                     </div>
 
 
@@ -69,12 +62,13 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to delete this event?
+                                    Are you sure you want to delete this room?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                     <!-- Form to submit delete request -->
-                                    <form action="" method="POST">
+                                    <form action="{{ route('room.destroy', $room->id) }}" method="POST">
+
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -84,8 +78,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- Edit event Modal -->
-                <!-- <div class="modal fade" id="editroomModal{{ $room->id }}" tabindex="-1" role="dialog" aria-labelledby="editroomModalLabel{{ $room->id }}" aria-hidden="true">
+                <!-- Edit room Modal -->
+                <div class="modal fade" id="editroomModal{{ $room->id }}" tabindex="-1" role="dialog" aria-labelledby="editroomModalLabel{{ $room->id }}" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -94,57 +88,76 @@
 
                             </div>
                             <div class="modal-body">
-                                <form action="" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('room.update', $room->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
 
-                                    
+
                                     <div class="form-group">
                                         <label for="image">Image</label>
                                         <input type="file" class="form-control-file" id="image" name="image">
                                     </div>
 
+                                    <!-- price input -->
                                     <div class="form-group">
-                                        <label for="titre">Titre</label>
-                                        <input type="text" class="form-control" id="titre" name="titre" value="{{ $event->titre }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="eventPlaces">Places</label>
-                                        <input type="number" min="1" class="form-control" id="eventPlaces" name="places" value="{{ $event->places }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="eventLocation">Location</label>
-                                        <input type="text" class="form-control" id="eventLocation" name="location" value="{{ $event->location }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="description">Description</label>
-                                        <textarea class="form-control" id="editor" name="description" rows="6">{{ $event->description }}</textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="eventDate">Date</label>
-                                        <input type="date" class="form-control" id="eventDate" name="date" value="{{( date('Y-m-d', strtotime($event->date))) }}">
+                                        <label for="price">price</label>
+                                        <input type="number" class="form-control" id="price" name="price" value="{{ $room->price }}">
                                     </div>
 
 
+                                    <!-- FLOOR input -->
+                                    <div class="form-group">
+                                        <label for="floor">floor</label>
+                                        <input type="number" class="form-control" id="floor" name="floor" value="{{ $room->floor }}">
+                                    </div>
+
+                                    <!-- MAXoccup input -->
+                                    <div class="form-group">
+                                        <label for="max_occupancy">max_occupancy</label>
+                                        <input type="number" min="1" class="form-control" id="max_occupancy" name="max_occupancy" value="{{ $room->max_occupancy }}">
+                                    </div>
+
+                                    <!-- type input -->
+                                    <div class="form-group">
+                                        <label for="room_type">room_type</label>
+                                        <select class="form-control" id="room_type" name="room_type">
+
+                                            <option value="single" {{ $room->room_type === 'single' ? 'selected' : '' }}>single</option>
+                                            <option value="double" {{ $room->room_type === 'double' ? 'selected' : '' }}>double</option>
+                                            <option value="suite" {{ $room->room_type === 'suite' ? 'selected' : '' }}>suite</option>
+
+                                        </select>
+                                    </div>
+
+                                    <!-- status input -->
+                                    <div class="form-group">
+                                        <label for="status">status</label>
+                                        <select class="form-control" id="status" name="status">
+
+                                            <option value="vacant" {{ $room->status === 'vacant' ? 'selected' : '' }}>vacant</option>
+                                            <option value="occupied" {{ $room->status === 'occupied' ? 'selected' : '' }}>occupied</option>
+                                            <option value="under_maintenance" {{ $room->status === 'under_maintenance' ? 'selected' : '' }}>under_maintenance</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- cateogries input -->
                                     <div class="form-group">
                                         <label for="categories">Categories</label>
                                         <select class="form-control" name="category_id" id="categories">
                                             @foreach($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $category->id == $event->category_id ? 'selected' : '' }}>
+                                            <option value="{{ $category->id }}" {{ $category->id == $room->category_id ? 'selected' : '' }}>
                                                 {{ $category->name }}
                                             </option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="typeAccept">Type Acceptation</label>
-                                        <select class="form-control" id="typeAccept" name="typeAccept">
-                                            <option value="automatique" {{ $event->typeAccept === 'automatique' ? 'selected' : '' }}>Automatique</option>
-                                            <option value="manuelle" {{ $event->typeAccept === 'manuelle' ? 'selected' : '' }}>Manuelle</option>
-                                        </select>
-                                    </div>
 
+
+                                    <!-- description input -->
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" id="editor" name="description" rows="6">{{ $room->description }}</textarea>
+                                    </div>
 
 
                             </div>
@@ -155,7 +168,7 @@
                             </form>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 @endforeach
             </div>
         </div>
@@ -169,7 +182,7 @@
                     <h5 class="modal-title" id="addroomModalLabel">Add room</h5>
 
                 </div>
-                <form action="{{ route('create-room') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('room.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <!-- image input -->
@@ -206,7 +219,7 @@
                         <div class="form-group">
                             <label for="room_type">room_type</label>
                             <select class="form-control" id="room_type" name="room_type">
-                                <option value="simple">simple</option>
+                                <option value="single">single</option>
                                 <option value="double">double</option>
                                 <option value="suite">suite</option>
                             </select>
@@ -228,6 +241,16 @@
                             <select class="form-control" id="categories" name="category_id">
                                 @foreach ($categories as $category)
                                 <option value="{{$category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- services input -->
+                        <div class="form-group">
+                            <label for="services">Services</label>
+                            <select class="form-control" id="services" name="service_id">
+                                @foreach ($services as $service)
+                                <option value="{{$service->id }}">{{ $service->name }}</option>
                                 @endforeach
                             </select>
                         </div>
