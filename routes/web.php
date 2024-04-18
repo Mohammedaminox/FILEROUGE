@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ForgetPasswordManager;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\ServiceController;
 
 // auth routes
 // auth routes
@@ -27,5 +29,27 @@ Route::post('/reset-password', [ForgetPasswordManager::class, 'resetPasswordPost
 //rooms routes
 //rooms routes
 
-Route::get('/room', [RoomController::class, 'index'])->name("show-room");
-Route::post('/create-room', [RoomController::class, 'store'])->name("create-room");
+
+
+
+//category routes
+//category routes
+//category routes
+
+Route::resource('category', CategoryController::class)->only([
+    'index', 'store', 'update', 'destroy'
+]);
+
+//service routes
+//service routes
+//service routes
+
+Route::resource('service', ServiceController::class)->only([
+    'index', 'store', 'update', 'destroy'
+]);
+
+Route::resource('room', RoomController::class)->only(['index', 'store', 'update', 'destroy']);
+
+
+
+Route::get('/hotelier', [RoomController::class, 'frontIndex'])->name('frontIndex');
