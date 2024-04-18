@@ -34,20 +34,35 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+        
+        // Find the user by email
         $user = User::where('email', $validateData['email'])->first();
+        
         if ($user) {
+            // Verify password
             if (password_verify($validateData['password'], $user->password)) {
+                // Set session data
                 session(['username' => $user->name]);
                 session(['email' => $user->email]);
                 session(['user_id' => $user->id]);
-
-                return redirect('/dashboard');
+                
+                // Redirect based on user role
+                if ($user->role === 'admin') {
+                    return redirect('/dashboard');
+                } elseif ($user->role === 'user') {
+                    return redirect('/hotelier');
+                }
             } else {
+                // Incorrect password
                 return redirect('/login')->withErrors(['password' => 'Invalid password']);
             }
         }
+        
+        // User not found
         return redirect('/login')->withErrors(['email' => 'User not found']);
     }
+    
+
     public function logout(Request $request)
     {
         Session::forget('user');
