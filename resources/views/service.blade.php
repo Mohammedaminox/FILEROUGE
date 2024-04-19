@@ -9,9 +9,6 @@
             <div>
                 <button type="button" class="btn btn-primary btn-lg me-2" data-bs-toggle="modal" data-bs-target="#addServiceModal">Add Service</button>
             </div>
-            <div>
-                <!-- You can add any additional controls or information here if needed -->
-            </div>
         </div>
 
         <table class="table table-stripe align-middle mb-0 bg-white">
@@ -51,24 +48,21 @@
 
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#icon_select').select2({
-                templateResult: formatState,
-                escapeMarkup: function(m) {
-                    return m;
-                } // Allows HTML in option text
-            });
 
-            function formatState(state) {
-                if (!state.id) {
-                    return state.text;
-                }
-                return $('<i class="' + state.text + '"></i> ');
-            }
-        });
-    </script>
 </div>
+</div>
+
+
+<!-- OUTSIDE THE MODAL -->
+<!-- OUTSIDE THE MODAL -->
+<!-- OUTSIDE THE MODAL -->
+
+<div class="mb-3">
+    <select name="icon_class" class="form-select" id="icon_select">
+        @foreach($iconClasses as $iconClass)
+        <option value="{{ $iconClass->class_name }}">{{ $iconClass->class_name }}</option>
+        @endforeach
+    </select>
 </div>
 
 
@@ -109,6 +103,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#icon_select').select2({
+            templateResult: formatState,
+            escapeMarkup: function(m) {
+                return m;
+            } // Allows HTML in option text
+        });
+
+        function formatState(state) {
+            if (!state.id) {
+                return state.text;
+            }
+            return $('<i class="' + state.text + '"></i> ');
+        }
+    });
+</script>
+
 <!-- Edit service Modal -->
 <div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceModalLabel" aria-hidden="true">
     <div class="modal-dialog">

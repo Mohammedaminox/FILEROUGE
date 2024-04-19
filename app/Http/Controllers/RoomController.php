@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Room;
+use App\Models\room_service;
 use App\Models\Service;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -39,44 +41,64 @@ class RoomController extends Controller
             'services' => $services
         ]);
     }
-
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'room_number' => 'required|unique:rooms|string|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif',  // Ensure valid image format
-            'room_type' => 'required|string|max:255|in:single,double,suite',  // Limit to specific types
-            'floor' => 'required|integer|min:1',  // Minimum floor of 1
-            'description' => 'nullable|string|max:1000',  // Reasonable description length limit
+            'image' => 'image|mimes:jpeg,png,jpg,gif',
+            'room_type' => 'required|string|max:255|in:single,double,suite',
+            'floor' => 'required|integer|min:1',
+            'description' => 'nullable|string|max:1000',
             'status' => 'required|string|in:vacant,occupied,under_maintenance',
             'availability' => 'boolean',
-            'price' => 'required|numeric',  // Minimum price of 0.01
-            'max_occupancy' => 'required|integer|min:1',  // Minimum occupancy of 1
-            'check_in_date' => 'nullable|date_format:Y-m-d H:i:s',  // Allow nullable date with specific format
-            'check_out_date' => 'nullable|date_format:Y-m-d H:i:s',  // Allow nullable date with specific format
-            'category_id' => 'required|exists:categories,id|integer',  // Ensure existing category ID
-            'user_id' => 'exists:users,id|integer',  // Ensure existing user ID
+            'price' => 'required|numeric|min:0.01',
+            'max_occupancy' => 'required|integer|min:1',
+            'check_in_date' => 'nullable|date_format:Y-m-d H:i:s',
+            'check_out_date' => 'nullable|date_format:Y-m-d H:i:s',
+            'category_id' => 'required|exists:categories,id|integer',
+            'user_id' => 'exists:users,id|integer',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $roomData = $request->all();
-
+    
+        $roomData = $validatedData;
+    
         $image = $request->file('image');
         if ($image) {
             $uniqueFileName = uniqid() . '_' . $image->getClientOriginalName();
             $image->move(public_path('Pback/assets/images'), $uniqueFileName);
-
             $roomData['image'] = $uniqueFileName;
         }
-
-        // Create the room record
+    
+        // Create room
         $room = Room::create($roomData);
-
-        return redirect('room')->with('success', 'Room stored successfully.');
+    
+        if ($room) {
+            // Check if services are provided in the request
+            if ($request->has('service_id')) {
+                // Prepare room services data
+                $roomServices = [];
+                foreach ($request->input('service_id') as $serviceId) {
+                    $roomServices[] = ['room_id' => $room->id, 'service_id' => $serviceId];
+                }
+    
+                // Insert room services
+                $inserted = DB::table('room_service')->insert($roomServices);
+    
+                if ($inserted) {
+                    return back()->with('success', 'Room created successfully');
+                } else {
+                   
+                    $room->delete();
+                    return back()->with('error', 'Room creation failed');
+                }
+            } else {
+                return back()->with('success', 'Room created successfully');
+            }
+        } else {
+            return back()->with('error', 'Room creation failed');
+        }
     }
+    
+
 
     public function update(Request $request, Room $room)
     {
@@ -97,6 +119,8 @@ class RoomController extends Controller
     }
 
 
+
+    
     public function destroy(Room $room)
     {
         if ($room->image) {

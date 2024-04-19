@@ -248,7 +248,7 @@
                         <!-- services input -->
                         <div class="form-group">
                             <label for="services">Services</label>
-                            <select class="form-control" id="services" name="service_id">
+                            <select class="form-control" id="services" name="service_id[]" multiple>
                                 @foreach ($services as $service)
                                 <option value="{{$service->id }}">{{ $service->name }}</option>
                                 @endforeach

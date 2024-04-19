@@ -25,7 +25,6 @@ return new class extends Migration
             $table->dateTime('check_in_date')->nullable();
             $table->dateTime('check_out_date')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
