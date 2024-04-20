@@ -28,6 +28,8 @@ class RoomController extends Controller
             'services' => $services
         ]);
     }
+
+
     public function frontIndex()
     {
         $rooms = Room::all();
@@ -41,6 +43,18 @@ class RoomController extends Controller
             'services' => $services
         ]);
     }
+
+    public function room_details($id)
+    {
+        $room = Room::find($id);
+        $service = Service::all();
+        return view('frontOffice.room_details',[
+            'room' => $room,
+            'service' => $service,
+        ]);
+    }
+
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -58,19 +72,19 @@ class RoomController extends Controller
             'category_id' => 'required|exists:categories,id|integer',
             'user_id' => 'exists:users,id|integer',
         ]);
-    
+
         $roomData = $validatedData;
-    
+
         $image = $request->file('image');
         if ($image) {
             $uniqueFileName = uniqid() . '_' . $image->getClientOriginalName();
             $image->move(public_path('Pback/assets/images'), $uniqueFileName);
             $roomData['image'] = $uniqueFileName;
         }
-    
+
         // Create room
         $room = Room::create($roomData);
-    
+
         if ($room) {
             // Check if services are provided in the request
             if ($request->has('service_id')) {
@@ -79,14 +93,14 @@ class RoomController extends Controller
                 foreach ($request->input('service_id') as $serviceId) {
                     $roomServices[] = ['room_id' => $room->id, 'service_id' => $serviceId];
                 }
-    
+
                 // Insert room services
                 $inserted = DB::table('room_service')->insert($roomServices);
-    
+
                 if ($inserted) {
                     return back()->with('success', 'Room created successfully');
                 } else {
-                   
+
                     $room->delete();
                     return back()->with('error', 'Room creation failed');
                 }
@@ -97,7 +111,7 @@ class RoomController extends Controller
             return back()->with('error', 'Room creation failed');
         }
     }
-    
+
 
 
     public function update(Request $request, Room $room)
@@ -120,7 +134,7 @@ class RoomController extends Controller
 
 
 
-    
+
     public function destroy(Room $room)
     {
         if ($room->image) {

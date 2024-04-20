@@ -264,22 +264,16 @@
                             <div class="p-4 mt-2">
                                 <div class="d-flex justify-content-between mb-3">
                                     <h5 class="mb-0">{{$room->categories->name}} </h5>
-                                    <div class="ps-2">
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                    </div>
+
                                 </div>
                                 <div class="d-flex mb-3">
-                                    @foreach($services as $service)
+                                    @foreach($room->services as $service)
                                     <small class="border-end me-3 pe-3"><i class="{{ $service->icon_class }} fs-6 "></i>{{ $service->name }}</small>
                                     @endforeach
                                 </div>
                                 <p class="text-body mb-3">{!! $room->description !!} </p>
                                 <div class="d-flex justify-content-between">
-                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="">View Detail</a>
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="{{ url('room_details', $room->id) }}">View Detail</a>
                                     <a class="btn btn-sm btn-dark rounded py-2 px-4" href="">Book Now</a>
                                 </div>
                             </div>

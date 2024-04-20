@@ -57,13 +57,13 @@
 <!-- OUTSIDE THE MODAL -->
 <!-- OUTSIDE THE MODAL -->
 
-<div class="mb-3">
+<!-- <div class="mb-3">
     <select name="icon_class" class="form-select" id="icon_select">
         @foreach($iconClasses as $iconClass)
         <option value="{{ $iconClass->class_name }}">{{ $iconClass->class_name }}</option>
         @endforeach
     </select>
-</div>
+</div> -->
 
 
 
@@ -94,6 +94,7 @@
                         </select>
                     </div>
 
+
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
@@ -110,17 +111,27 @@
             templateResult: formatState,
             escapeMarkup: function(m) {
                 return m;
-            } // Allows HTML in option text
+            }, // Allows HTML in option text
+            dropdownCssClass: "select2-dropdown-z-index"
         });
 
         function formatState(state) {
             if (!state.id) {
                 return state.text;
             }
-            return $('<i class="' + state.text + '"></i> ');
+            return $('<span><i class="' + state.text + '"></i> ' + state.text + '</span>');
         }
     });
 </script>
+
+<style>
+    .select2-dropdown-z-index {
+        z-index: 100000;
+    }
+</style>
+
+
+
 
 <!-- Edit service Modal -->
 <div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceModalLabel" aria-hidden="true">

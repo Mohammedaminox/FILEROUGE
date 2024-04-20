@@ -25,9 +25,6 @@ Route::post('/forget-password', [ForgetPasswordManager::class, 'forgetPasswordPo
 Route::get('/reset-password{token}', [ForgetPasswordManager::class, 'resetPassword'])->name("resetPassword");
 Route::post('/reset-password', [ForgetPasswordManager::class, 'resetPasswordPost'])->name("resetPasswordPost");
 
-//rooms routes
-//rooms routes
-//rooms routes
 
 
 
@@ -48,7 +45,12 @@ Route::resource('service', ServiceController::class)->only([
     'index', 'store', 'update', 'destroy'
 ]);
 
+//rooms routes
+//rooms routes
+//rooms routes
 Route::resource('room', RoomController::class)->only(['index', 'store', 'update', 'destroy']);
+
+Route::get('/room_details/{id}', [RoomController::class, 'room_details'])->name('room_details');
 
 
 

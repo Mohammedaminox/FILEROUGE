@@ -38,6 +38,6 @@ class Room extends Model
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'service_id');
+        return $this->belongsToMany(Service::class, 'room_service', 'room_id', 'service_id');
     }
 }
