@@ -28,7 +28,7 @@
                     <td>{{ $booking->check_in_date }}</td>
                     <td>{{ $booking->check_out_date }}</td>
                     <td>{{ $booking->total_price }}</td>
-                    <td>{{ $booking->status }}</td>
+                    <td class="{{ $booking->status === 'confirmed' ? 'text-success' : 'text-danger' }}">{{ $booking->status }}</td>
                     <td>
                         <button type="button" class="btn btn-link btn-sm btn-rounded text-danger" onclick="openDeleteModal('{{ $booking->id }}')">
                             <i class="bi bi-trash h5"></i>
@@ -88,6 +88,7 @@
         deleteModal.show();
     }
 </script>
+
 
 </body>
 

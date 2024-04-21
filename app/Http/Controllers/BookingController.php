@@ -37,7 +37,27 @@ class BookingController extends Controller
 
     public function myBookings()
     {
-        $bookings = Booking::where('user_id', Auth::id())->get();
-        return view('bookings.index', ['bookings' => $bookings]);
+        $user = session('user_id');
+        $bookings = Booking::where('user_id', $user)->where('status', 'confirmed')->get();
+        return view('frontOffice.profil', ['bookings' => $bookings]);
     }
+
+    public function cancelBooking(Request $request)
+{
+    $booking = Booking::find($request->booking_id);
+    if ($booking) {
+        $booking->status = 'canceled';
+        $booking->save();
+    }
+    return redirect()->route('myBookings')->with('success', 'Booking canceled successfully');
+}
+
+public function destroy(Booking $id)
+{
+    $id->delete();
+
+    return redirect()->back()->with('success', 'booking deleted successfully');
+}
+
+    
 }

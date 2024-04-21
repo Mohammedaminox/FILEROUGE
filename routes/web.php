@@ -56,6 +56,11 @@ Route::get('/room_details/{id}', [RoomController::class, 'room_details'])->name(
 Route::post('/book_room/{room}', [BookingController::class, 'book'])->name('book');
 Route::get('/booking', [BookingController::class, 'index'])->name('bookings');
 
+Route::get('/profil', [BookingController::class, 'myBookings'])->name('myBookings');
+
+Route::put('/cancel-booking', [BookingController::class, 'cancelBooking'])->name('cancelBooking');
+Route::delete('/booking/{id}', [BookingController::class, 'destroy'])->name('destroy');
+
 
 
 Route::get('/hotelier', [RoomController::class, 'frontIndex'])->name('frontIndex');
@@ -63,3 +68,4 @@ Route::get('/rooms', [RoomController::class, 'frontRooms'])->name('frontRooms');
 Route::get('/about', [RoomController::class, 'frontAbout'])->name('frontAbout');
 Route::get('/sevices', [RoomController::class, 'frontServices'])->name('frontServices');
 Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontContact');
+
