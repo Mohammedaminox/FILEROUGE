@@ -29,7 +29,7 @@ class RoomController extends Controller
         ]);
     }
 
-
+    //front pages
     public function frontIndex()
     {
         $rooms = Room::all();
@@ -42,6 +42,41 @@ class RoomController extends Controller
             'categories' => $categories,
             'services' => $services
         ]);
+    }
+
+    public function frontRooms()
+    {
+        $rooms = Room::all();
+        $categories = Category::all();
+        $services = Service::all();
+
+
+        return view('frontOffice.room', [
+            'rooms' => $rooms,
+            'categories' => $categories,
+            'services' => $services
+        ]);
+    }
+
+    public function frontServices()
+    {
+        $services = Service::all();
+
+
+        return view('frontOffice.service', [
+            'services' => $services
+        ]);
+    }
+
+    public function frontAbout()
+    {
+
+        return view('frontOffice.about');
+    }
+    
+    public function frontContact()
+    {
+        return view('frontOffice.contact');
     }
 
     public function room_details($id)

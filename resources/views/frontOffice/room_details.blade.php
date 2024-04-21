@@ -76,21 +76,13 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                            <div class="navbar-nav mr-auto py-0">
-                                <a href="index.html" class="nav-item nav-link active">Home</a>
-                                <a href="about.html" class="nav-item nav-link">About</a>
-                                <a href="service.html" class="nav-item nav-link">Services</a>
-                                <a href="room.html" class="nav-item nav-link">Rooms</a>
-                                <div class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                    <div class="dropdown-menu rounded-0 m-0">
-                                        <a href="booking.html" class="dropdown-item">Booking</a>
-                                        <a href="team.html" class="dropdown-item">Our Team</a>
-                                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                    </div>
-                                </div>
-                                <a href="contact.html" class="nav-item nav-link">Contact</a>
-                            </div>
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="{{ route('frontIndex') }}" class="nav-item nav-link active">Home</a>
+                            <a href="{{ route('frontAbout') }}" class="nav-item nav-link">About</a>
+                            <a href="{{ route('frontServices') }}" class="nav-item nav-link">Services</a>
+                            <a href="{{ route('frontRooms') }}" class="nav-item nav-link">Rooms</a>
+                            <a href="{{ route('frontContact') }}" class="nav-item nav-link">Contact</a>
+                        </div>
                             <a href="https://htmlcodex.com/hotel-html-template-pro" class="btn btn-primary rounded-0 py-4 px-md-5 d-none d-lg-block">Premium Version<i class="fa fa-arrow-right ms-3"></i></a>
                         </div>
                     </nav>
@@ -110,15 +102,27 @@
                             <p class="card-text">{!! $room->description !!}</p>
                             <ul class="list-group mb-3">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Category
+                                    Floor :
+                                    <span class="badge bg-primary rounded-pill">Number: {{$room->floor}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Category :
                                     <span class="badge bg-primary rounded-pill">{{$room->categories->name}}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Price per Night
+                                    Room Type :
+                                    <span class="badge bg-primary rounded-pill">{{$room->room_type}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Occupancy :
+                                    <span class="badge bg-primary rounded-pill">{{$room->max_occupancy}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Price per Night :
                                     <span class="badge bg-primary rounded-pill">${{$room->price}}</span>
                                 </li>
                                 <li class="list-group-item">
-                                    Services
+                                    Services :
                                     <ul class="list-group mt-2">
                                         @foreach($room->services as $service)
                                         <li class="list-group-item">
@@ -148,16 +152,8 @@
                     </div>
                     <div class="modal-body">
                         <!-- Your booking form goes here -->
-                        <form action="" method="POST">
+                        <form action="{{ route('book', $room->id) }}" method="POST">
                             @csrf
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Your Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
                             <div class="mb-3">
                                 <label for="check_in_date" class="form-label">Check-in Date</label>
                                 <input type="date" class="form-control" id="check_in_date" name="check_in_date" required>
@@ -166,14 +162,18 @@
                                 <label for="check_out_date" class="form-label">Check-out Date</label>
                                 <input type="date" class="form-control" id="check_out_date" name="check_out_date" required>
                             </div>
-                            <!-- Add total price field -->
-                            <input type="hidden" name="total_price" value="{{ $room->price }}">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="mb-3">
+                                <label for="total_price" class="form-label">Total Price</label>
+                                <input type="text" class="form-control" id="total_price" name="total_price" readonly>
+                            </div>
+                            <input type="hidden" name="user_id" value="{{ session('user_id') }}">
+                            <button type="submit" class="btn btn-primary">Book Now</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -182,17 +182,67 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="Pfront/lib/wow/wow.min.js"></script>
+    <script src="Pfront/lib/easing/easing.min.js"></script>
+    <script src="Pfront/lib/waypoints/waypoints.min.js"></script>
+    <script src="Pfront/lib/counterup/counterup.min.js"></script>
+    <script src="Pfront/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="Pfront/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="Pfront/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="Pfront/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+        $(function() {
+            // Get today's date
+            let today = new Date();
+            // Get the day, month, and year
+            let dd = today.getDate();
+            let mm = today.getMonth() + 1; //January is 0!
+            let yyyy = today.getFullYear();
+
+            // Add leading zeros if necessary
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+
+            // Format the date as 'YYYY-MM-DD'
+            today = yyyy + '-' + mm + '-' + dd;
+
+            // Set the minimum date for check-in and check-out to today
+            $('#check_in_date').attr('min', today);
+            $('#check_out_date').attr('min', today);
+
+            // When the check-in date changes
+            $('#check_in_date').on('change', function() {
+                // Set the minimum date for check-out to the selected check-in date
+                $('#check_out_date').attr('min', $(this).val());
+                // Clear the check-out date to prevent selecting an invalid date
+                $('#check_out_date').val('');
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkInDateInput = document.getElementById('check_in_date');
+            const checkOutDateInput = document.getElementById('check_out_date');
+            const totalPriceInput = document.getElementById('total_price');
+            const pricePerNight = {{$room -> price}};
+
+            checkInDateInput.addEventListener('change', updateTotalPrice);
+            checkOutDateInput.addEventListener('change', updateTotalPrice);
+
+            function updateTotalPrice() {
+                const nights = Math.round((new Date(checkOutDateInput.value) - new Date(checkInDateInput.value)) / (1000 * 60 * 60 * 24));
+                totalPriceInput.value = (pricePerNight * nights).toFixed(2);
+            }
+        });
+    </script>
+
+
 </body>
 
 </html>

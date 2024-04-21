@@ -18,8 +18,7 @@ return new class extends Migration
             $table->dateTime('check_in_date');
             $table->dateTime('check_out_date');
             $table->decimal('total_price', 10, 2);
-            $table->string('status')->default('confirmed');
-            // Additional booking details can be added here
+            $table->enum('status', ['confirmed', 'canceled'])->default('confirmed');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

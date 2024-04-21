@@ -133,11 +133,11 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="" aria-expanded="false">
+                            <a class="sidebar-link" href="{{ url('/booking') }}" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-cards"></i>
                                 </span>
-                                <span class="hide-menu">Reservation</span>
+                                <span class="hide-menu">Booking</span>
                             </a>
                         </li>
 

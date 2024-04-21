@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ForgetPasswordManager;
 use App\Http\Controllers\RoomController;
@@ -27,31 +28,38 @@ Route::post('/reset-password', [ForgetPasswordManager::class, 'resetPasswordPost
 
 
 
-
-
 //category routes
 //category routes
-//category routes
-
 Route::resource('category', CategoryController::class)->only([
     'index', 'store', 'update', 'destroy'
 ]);
 
-//service routes
-//service routes
-//service routes
 
+
+//service routes
+//service routes
 Route::resource('service', ServiceController::class)->only([
     'index', 'store', 'update', 'destroy'
 ]);
 
-//rooms routes
+
+
 //rooms routes
 //rooms routes
 Route::resource('room', RoomController::class)->only(['index', 'store', 'update', 'destroy']);
-
 Route::get('/room_details/{id}', [RoomController::class, 'room_details'])->name('room_details');
 
 
 
+//booking routes
+//booking routes
+Route::post('/book_room/{room}', [BookingController::class, 'book'])->name('book');
+Route::get('/booking', [BookingController::class, 'index'])->name('bookings');
+
+
+
 Route::get('/hotelier', [RoomController::class, 'frontIndex'])->name('frontIndex');
+Route::get('/rooms', [RoomController::class, 'frontRooms'])->name('frontRooms');
+Route::get('/about', [RoomController::class, 'frontAbout'])->name('frontAbout');
+Route::get('/sevices', [RoomController::class, 'frontServices'])->name('frontServices');
+Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontContact');
