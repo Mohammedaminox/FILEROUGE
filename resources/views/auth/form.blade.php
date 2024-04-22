@@ -6,13 +6,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Welcome to newsletter</title>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="Pback/css/login.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 	<div class="container" id="container">
-		<div class="form-container sign-up-container">	
+		<div class="form-container sign-up-container">
 			<form action="{{ url('register') }}" method="POST">
 				@csrf
 				<h1>Create Account</h1>
@@ -22,22 +23,27 @@
 					<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 				</div>
 				<span>or use your email for registration</span>
-				<input type="text" name="name" placeholder="Name" required />
+				<input type="text" name="name" class="form-control" placeholder="Name" required />
 				@error('name')
-				<div class="alert alert-danger">{{ $message }}</div>
+				<div class="alert alert-danger mt-2">{{ $message }}</div>
 				@enderror
-				<input type="email" name="email" placeholder="Email" required />
+				<input type="email" name="email" class="form-control" placeholder="Email" required />
 				@error('email')
-				<div class="alert alert-danger">{{ $message }}</div>
+				<div class="text-danger mt-2">{{ $message }}</div>
 				@enderror
-				<input type="password" name="password" placeholder="Password" required />
+				<input type="password" name="password" class="form-control" placeholder="Password" required />
 				@error('password')
-				<div class="alert alert-danger">{{ $message }}</div>
+				<div class="text-danger mt-2">{{ $message }}</div>
 				@enderror
 				<button type="submit">Sign Up</button>
 			</form>
 		</div>
 		<div class="form-container sign-in-container">
+			@if(session("success"))
+			<div class="alert alert-success" role="alert">
+				{{ session("success") }}
+			</div>
+			@endif
 			<form action="{{ url('login') }}" method="post">
 				@csrf
 				<h1>Sign in</h1>
@@ -47,15 +53,15 @@
 					<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 				</div>
 				<span>or use your account</span>
-				<input type="email" name="email" placeholder="Email" required />
+				<input type="email" name="email" class="form-control" placeholder="Email" required />
 				@error('email')
-				<div class="alert alert-danger">{{ $message }}</div>
+				<div class="text-danger mt-2">{{ $message }}</div>
 				@enderror
-				<input type="password" name="password" placeholder="Password" required />
+				<input type="password" name="password" class="form-control" placeholder="Password" required />
 				@error('password')
-				<div class="alert alert-danger">{{ $message }}</div>
+				<div class="text-danger mt-2">{{ $message }}</div>
 				@enderror
-				<a href="{{route('forgetPassword')}}">Forgot your password?</a>
+				<a href="{{ route('forgetPassword') }}">Forgot your password?</a>
 				<button type="submit">Sign In</button>
 			</form>
 		</div>

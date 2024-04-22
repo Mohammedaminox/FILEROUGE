@@ -92,6 +92,18 @@
         <!-- Header End -->
 
         <!-- Room Start -->
+        @if(session("success"))
+        <div class="alert alert-success" role="alert">
+            {{ session("success") }}
+        </div>
+        @endif
+
+        @if(session("failed"))
+        <div class="alert alert-danger" role="alert">
+            {{ session("failed") }}
+        </div>
+        @endif
+
         <div class="container py-5">
             <div class="row">
                 <div class="col-md-8 mx-auto">

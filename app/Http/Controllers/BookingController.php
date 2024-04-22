@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +22,13 @@ class BookingController extends Controller
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after:check_in_date',
         ]);
+        // Get the room
+        $room = Room::findOrFail($room_id);
 
+        // Check if the room is available for booking
+        if (!$room->isAvailableForBooking($request->check_in_date, $request->check_out_date)) {
+            return redirect()->back()->with(['failed' => 'The room is not available for the selected dates.']);
+        }
         // Create a new booking
         $booking = new Booking();
         $booking->user_id = $request->user_id;
@@ -43,21 +50,19 @@ class BookingController extends Controller
     }
 
     public function cancelBooking(Request $request)
-{
-    $booking = Booking::find($request->booking_id);
-    if ($booking) {
-        $booking->status = 'canceled';
-        $booking->save();
+    {
+        $booking = Booking::find($request->booking_id);
+        if ($booking) {
+            $booking->status = 'canceled';
+            $booking->save();
+        }
+        return redirect()->route('myBookings')->with('success', 'Booking canceled successfully');
     }
-    return redirect()->route('myBookings')->with('success', 'Booking canceled successfully');
-}
 
-public function destroy(Booking $id)
-{
-    $id->delete();
+    public function destroy(Booking $id)
+    {
+        $id->delete();
 
-    return redirect()->back()->with('success', 'booking deleted successfully');
-}
-
-    
+        return redirect()->back()->with('success', 'booking deleted successfully');
+    }
 }

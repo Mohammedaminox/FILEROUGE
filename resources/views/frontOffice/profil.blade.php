@@ -91,7 +91,11 @@
         </div>
 
         <!-- Header End -->
-
+        @if(session("success"))
+        <div class="alert alert-success" role="alert">
+            {{ session("success") }}
+        </div>
+        @endif
         <div class="container-fluid bg-light py-5">
             <div class="container">
                 <h1 class="mb-4">Welcome to your profile <span class="text-primary text-uppercase">{{ session('username') }}</span></h1>

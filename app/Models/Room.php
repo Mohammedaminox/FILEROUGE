@@ -40,4 +40,19 @@ class Room extends Model
     {
         return $this->belongsToMany(Service::class, 'room_service', 'room_id', 'service_id');
     }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function isAvailableForBooking($checkInDate, $checkOutDate)
+    {
+        $booked = $this->bookings()
+            ->where('check_out_date', '>', $checkInDate)
+            ->where('check_in_date', '<', $checkOutDate)
+            ->exists();
+
+        return !$booked;
+    }
 }

@@ -24,7 +24,7 @@ class CategoryController extends Controller
         ]);
         Category::create($request->all());
         return redirect()->route('category.index')
-            ->with('success', 'Category created successfully.');
+            ->with('successStore', 'Category created successfully.');
     }
 
     public function update(Request $request, Category $category)
@@ -37,7 +37,7 @@ class CategoryController extends Controller
         $category->update($request->all());
 
         return redirect()->route('category.index')
-            ->with('success', 'Category updated successfully');
+            ->with('successUpdate', 'Category updated successfully');
     }
 
     public function destroy(Category $category)
@@ -45,6 +45,6 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('category.index')
-            ->with('success', 'Category deleted successfully');
+            ->with('successDestroy', 'Category deleted successfully');
     }
 }
