@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ForgetPasswordManager;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UserController;
 
 // auth routes
 // auth routes
@@ -32,6 +33,11 @@ Route::post('/reset-password', [ForgetPasswordManager::class, 'resetPasswordPost
 //category routes
 Route::resource('category', CategoryController::class)->only([
     'index', 'store', 'update', 'destroy'
+]);
+
+
+Route::resource('user', UserController::class)->only([
+    'index','destroy'
 ]);
 
 
