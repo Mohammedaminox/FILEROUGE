@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Evento</title>
+    <title>Hotelier</title>
     <link rel="shortcut icon" type="image/png" href="Pback/assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="Pback/assets/css/styles.min.css" />
     <!-- Bootstrap Icons -->

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('room_number')->unique();        //room numbre
-            $table->string('image');                       //room image
-            $table->enum('room_type', ['single', 'double', 'suite']);          //room type (par exemple, simple, double, suite)
-            $table->integer('floor');                    //Le numéro de l'étage où se trouve la chambre
+            $table->string('room_number')->unique();       
+            $table->string('image');                    
+            $table->enum('room_type', ['single', 'double', 'suite']);   
+            $table->integer('floor');                   
             $table->text('description')->nullable();
             $table->enum('status', ['vacant', 'occupied', 'under_maintenance'])->default('vacant');
             $table->boolean('availability')->default(true);
