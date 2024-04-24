@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ForgetPasswordManager;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\StatistiqueController;
 use App\Http\Controllers\UserController;
 
 // auth routes
@@ -74,4 +75,8 @@ Route::get('/rooms', [RoomController::class, 'frontRooms'])->name('frontRooms');
 Route::get('/about', [RoomController::class, 'frontAbout'])->name('frontAbout');
 Route::get('/sevices', [RoomController::class, 'frontServices'])->name('frontServices');
 Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontContact');
+
+
+
+Route::get('/Statistique', [StatistiqueController::class, 'Statistique'])->name('Statistique');
 

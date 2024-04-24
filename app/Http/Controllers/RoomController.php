@@ -149,46 +149,54 @@ class RoomController extends Controller
 
 
 
-public function update(Request $request, Room $room)
-{
-    // Validate the request data
-    $validatedData = $request->validate([
-        'room_type' => 'required|string|max:255|in:single,double,suite',
-        'floor' => 'required|integer|min:1',
-        'description' => 'nullable|string|max:1000',
-        'status' => 'required|string|in:vacant,occupied,under_maintenance',
-        'price' => 'required|numeric|min:0.01',
-        'max_occupancy' => 'required|integer|min:1',
-        'category_id' => 'required|exists:categories,id|integer',
-        'image' => 'image|mimes:jpeg,png,jpg,gif',
-    ]);
-
-    // Update the room attributes
-    $room->update($validatedData);
-
-    // Check if an image is uploaded
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $uniqueFileName = uniqid() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('Pback/assets/images'), $uniqueFileName);
-        // Delete old image
-        if ($room->image) {
-            unlink(public_path('Pback/assets/images/' . $room->image));
+    public function update(Request $request, Room $room)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'room_type' => 'required|string|max:255|in:single,double,suite',
+            'floor' => 'required|integer|min:1',
+            'description' => 'nullable|string|max:1000',
+            'status' => 'required|string|in:vacant,occupied,under_maintenance',
+            'price' => 'required|numeric|min:0.01',
+            'max_occupancy' => 'required|integer|min:1',
+            'category_id' => 'required|exists:categories,id|integer',
+            'image' => 'image|mimes:jpeg,png,jpg,gif',
+        ]);
+    
+        // Check if an image is uploaded
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $uniqueFileName = uniqid() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('Pback/assets/images'), $uniqueFileName);
+    
+            // Delete old image
+            if ($room->image) {
+                unlink(public_path('Pback/assets/images/' . $room->image));
+            }
+    
+            // Update the image field in $room
+            $room->image = $uniqueFileName;
+    
+            // Update image attribute in validated data
+            $validatedData['image'] = $uniqueFileName;
         }
-        // Update the image field in $room
-        $room->image = $uniqueFileName;
-        $room->save();
+    
+        // Update the room attributes except for the image
+        $room->update($validatedData);
+    
+        // Update room services
+        if ($request->has('service_id')) {
+            $room->services()->sync($request->input('service_id'));
+        } else {
+            $room->services()->detach();
+        }
+    
+        return redirect('room')->with('success', 'Room updated successfully.');
     }
-
-    // Update room services
-    if ($request->has('service_id')) {
-        $room->services()->sync($request->input('service_id'));
-    } else {
-        $room->services()->detach();
-    }
-
-    return redirect('room')->with('success', 'Room updated successfully.');
-}
+    
+    
+    
+    
 
 
 

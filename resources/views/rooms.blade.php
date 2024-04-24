@@ -83,57 +83,50 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editroomModalLabel{{ $room->id }}">Edit
-                                    room</h5>
-
+                                <h5 class="modal-title" id="editroomModalLabel{{ $room->id }}">Edit room</h5>
                             </div>
                             <div class="modal-body">
                                 <form action="{{ route('room.update', $room->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
 
-
                                     <div class="form-group">
-                                        <label for="image">Image</label>
-                                        <input type="file" class="form-control-file" id="image" name="image">
+                                        <label for="edit_image">Image</label>
+                                        <input type="file" class="form-control-file" id="edit_image" name="image">
                                     </div>
 
                                     <!-- price input -->
                                     <div class="form-group">
-                                        <label for="price">price</label>
-                                        <input type="number" class="form-control" id="price" name="price" value="{{ $room->price }}">
+                                        <label for="edit_price">price</label>
+                                        <input type="number" class="form-control" id="edit_price" name="price" value="{{ $room->price }}">
                                     </div>
-
 
                                     <!-- FLOOR input -->
                                     <div class="form-group">
-                                        <label for="floor">floor</label>
-                                        <input type="number" class="form-control" id="floor" name="floor" value="{{ $room->floor }}">
+                                        <label for="edit_floor">floor</label>
+                                        <input type="number" class="form-control" id="edit_floor" name="floor" value="{{ $room->floor }}">
                                     </div>
 
                                     <!-- MAXoccup input -->
                                     <div class="form-group">
-                                        <label for="max_occupancy">max_occupancy</label>
-                                        <input type="number" min="1" class="form-control" id="max_occupancy" name="max_occupancy" value="{{ $room->max_occupancy }}">
+                                        <label for="edit_max_occupancy">max_occupancy</label>
+                                        <input type="number" min="1" class="form-control" id="edit_max_occupancy" name="max_occupancy" value="{{ $room->max_occupancy }}">
                                     </div>
 
                                     <!-- type input -->
                                     <div class="form-group">
-                                        <label for="room_type">room_type</label>
-                                        <select class="form-control" id="room_type" name="room_type">
-
+                                        <label for="edit_room_type">room_type</label>
+                                        <select class="form-control" id="edit_room_type" name="room_type">
                                             <option value="single" {{ $room->room_type === 'single' ? 'selected' : '' }}>single</option>
                                             <option value="double" {{ $room->room_type === 'double' ? 'selected' : '' }}>double</option>
                                             <option value="suite" {{ $room->room_type === 'suite' ? 'selected' : '' }}>suite</option>
-
                                         </select>
                                     </div>
 
                                     <!-- status input -->
                                     <div class="form-group">
-                                        <label for="status">status</label>
-                                        <select class="form-control" id="status" name="status">
-
+                                        <label for="edit_status">status</label>
+                                        <select class="form-control" id="edit_status" name="status">
                                             <option value="vacant" {{ $room->status === 'vacant' ? 'selected' : '' }}>vacant</option>
                                             <option value="occupied" {{ $room->status === 'occupied' ? 'selected' : '' }}>occupied</option>
                                             <option value="under_maintenance" {{ $room->status === 'under_maintenance' ? 'selected' : '' }}>under_maintenance</option>
@@ -142,8 +135,8 @@
 
                                     <!-- cateogries input -->
                                     <div class="form-group">
-                                        <label for="categories">Categories</label>
-                                        <select class="form-control" name="category_id" id="categories">
+                                        <label for="edit_categories">Categories</label>
+                                        <select class="form-control" name="category_id" id="edit_categories">
                                             @foreach($categories as $category)
                                             <option value="{{ $category->id }}" {{ $category->id == $room->category_id ? 'selected' : '' }}>
                                                 {{ $category->name }}
@@ -152,13 +145,25 @@
                                         </select>
                                     </div>
 
+                                    <!-- services input -->
+                                    <div class="form-group">
+                                        <label for="edit_services">Services</label>
+                                        <select class="form-control" id="edit_services" name="service_id[]" multiple>
+                                            @foreach ($services as $service)
+                                            <option value="{{$service->id }}" {{ in_array($service->id, $room->services->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                                {{ $service->name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
 
                                     <!-- description input -->
                                     <div class="form-group">
-                                        <label for="description">Description</label>
-                                        <textarea class="form-control" id="editor" name="description" rows="6">{{ $room->description }}</textarea>
+                                        <label for="edit_description">Description</label>
+                                        <textarea class="form-control editorEditroom" name="description" id="edit_description_{{ $room->id }}" rows="6">{{ $room->description }}</textarea>
                                     </div>
-
 
                             </div>
                             <div class="modal-footer">
@@ -169,6 +174,7 @@
                         </div>
                     </div>
                 </div>
+
                 @endforeach
             </div>
         </div>
@@ -301,6 +307,18 @@
             .catch(error => {
                 console.error(error);
             });
+
+        // Initialize ClassicEditor for each textarea
+        document.querySelectorAll('.editorEditroom').forEach((textarea) => {
+            ClassicEditor
+                .create(textarea)
+                .then(editor => {
+                    console.log(editor);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
     </script>
 
 
