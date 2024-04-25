@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('room_number')->unique();       
+            $table->string('room_number')->unique(); 
             $table->string('image');                    
             $table->enum('room_type', ['single', 'double', 'suite']);   
             $table->integer('floor');                   

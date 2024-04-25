@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\room_service;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -36,11 +37,20 @@ class RoomController extends Controller
         $categories = Category::all();
         $services = Service::all();
 
+        $Cusers = User::all()->where('role', 'user')->count();
+        $Cservices = Service::all()->count();
+        $Crooms = Room::all()->count();
+
+
 
         return view('frontOffice.index', [
             'rooms' => $rooms,
             'categories' => $categories,
-            'services' => $services
+            'services' => $services,
+
+            'Cusers' => $Cusers,
+            'Cservices' => $Cservices,
+            'Crooms' => $Crooms,
         ]);
     }
 
@@ -54,7 +64,8 @@ class RoomController extends Controller
         return view('frontOffice.room', [
             'rooms' => $rooms,
             'categories' => $categories,
-            'services' => $services
+            'services' => $services,
+
         ]);
     }
 
@@ -70,8 +81,14 @@ class RoomController extends Controller
 
     public function frontAbout()
     {
-
-        return view('frontOffice.about');
+        $Cusers = User::all()->where('role', 'user')->count();
+        $Cservices = Service::all()->count();
+        $Crooms = Room::all()->count();
+        return view('frontOffice.about', [
+            'Cusers' => $Cusers,
+            'Cservices' => $Cservices,
+            'Crooms' => $Crooms,
+        ]);
     }
 
     public function frontContact()
@@ -83,7 +100,7 @@ class RoomController extends Controller
     {
         $room = Room::find($id);
         $service = Service::all();
-        return view('frontOffice.room_details',[
+        return view('frontOffice.room_details', [
             'room' => $room,
             'service' => $service,
         ]);
@@ -162,41 +179,41 @@ class RoomController extends Controller
             'category_id' => 'required|exists:categories,id|integer',
             'image' => 'image|mimes:jpeg,png,jpg,gif',
         ]);
-    
+
         // Check if an image is uploaded
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $uniqueFileName = uniqid() . '_' . $image->getClientOriginalName();
             $image->move(public_path('Pback/assets/images'), $uniqueFileName);
-    
+
             // Delete old image
             if ($room->image) {
                 unlink(public_path('Pback/assets/images/' . $room->image));
             }
-    
+
             // Update the image field in $room
             $room->image = $uniqueFileName;
-    
+
             // Update image attribute in validated data
             $validatedData['image'] = $uniqueFileName;
         }
-    
+
         // Update the room attributes except for the image
         $room->update($validatedData);
-    
+
         // Update room services
         if ($request->has('service_id')) {
             $room->services()->sync($request->input('service_id'));
         } else {
             $room->services()->detach();
         }
-    
+
         return redirect('room')->with('success', 'Room updated successfully.');
     }
-    
-    
-    
-    
+
+
+
+
 
 
 
@@ -213,5 +230,28 @@ class RoomController extends Controller
         $room->delete();
         return redirect('room')
             ->with('success', 'room deleted successfully.');
+    }
+
+
+    public function filterRooms(Request $request)
+    {
+
+        $categories = Category::all();
+        $services = Service::all();
+        
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        // Get rooms that are not booked between the selected dates
+        $available_rooms = Room::whereDoesntHave('bookings', function ($query) use ($start_date, $end_date) {
+            $query->where('check_in_date', '<', $end_date)
+                ->where('check_out_date', '>', $start_date);
+        })->get();
+
+        return view('frontOffice.room_list', [
+            'available_rooms' => $available_rooms,
+            'categories' => $categories,
+            'services' => $services,
+        ]);
     }
 }

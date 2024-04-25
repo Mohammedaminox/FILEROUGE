@@ -81,3 +81,8 @@ Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontCont
 
 Route::get('/Statistique', [StatistiqueController::class, 'Statistique'])->name('Statistique');
 
+// Route::get('/room_list', [RoomController::class, 'index'])->name('room.list');
+Route::get('/filter-rooms', [RoomController::class, 'filterRooms'])->name('filter.rooms');
+
+
+

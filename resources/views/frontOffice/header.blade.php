@@ -30,10 +30,12 @@
 
     <!-- Template Stylesheet -->
     <link href="Pfront/css/style.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 
 <body>
-    <div class="container-xxl bg-white p-0">
+    <div>
 
 
         <!-- Header Start -->
@@ -82,10 +84,12 @@
                             </div>
                             <div class="d-flex align-items-center">
                                 <a href="{{ route('myBookings') }}" class="btn btn-primary rounded-0 py-2 px-md-4 d-block d-lg-inline-block me-2">Bookings <i class="bi bi-calendar2-check ms-3"></i></a>
-                                <a href="{{ route('logout') }}" class="btn btn-primary rounded-0 py-2 px-md-4 d-block d-lg-inline-block" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout <i class="fa fa-arrow-right ms-3"></i></a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+
+                                <a href="{{ route('logout') }}" class="btn btn-primary rounded-0 py-2 px-md-4 d-block d-lg-inline-block" onclick="event.preventDefault(); document.getElementById('front-logout-form').submit();">Logout <i class="fa fa-arrow-right ms-3"></i></a>
+                                <form id="front-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
+
                             </div>
                         </div>
                     </nav>
@@ -114,6 +118,7 @@
     <script src="Pfront/lib/venobox/venobox.min.js"></script>
     <!-- Contact Form JavaScript File -->
     <script src="Pfront/contactform/contactform.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Template Main Javascript File -->
     <script src="Pfront/js/main.js"></script>

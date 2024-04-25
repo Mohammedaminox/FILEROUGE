@@ -24,11 +24,17 @@ class BookingController extends Controller
         ]);
         // Get the room
         $room = Room::findOrFail($room_id);
-
+        $bookings = Booking::where('room_id', $room_id)->get();
+       
         // Check if the room is available for booking
-        if (!$room->isAvailableForBooking($request->check_in_date, $request->check_out_date)) {
-            return redirect()->back()->with(['failed' => 'The room is not available for the selected dates.']);
+        foreach ($bookings as $booking) {
+            if (!$room->isAvailableForBooking($request->check_in_date, $request->check_out_date) && $booking->status != "canceled") {
+                return redirect()->back()->with(['failed' => 'The room is not available for the selected dates.']);
+            }
         }
+
+
+
         // Create a new booking
         $booking = new Booking();
         $booking->user_id = $request->user_id;

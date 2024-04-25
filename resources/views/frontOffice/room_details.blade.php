@@ -162,7 +162,7 @@
                 const nights = Math.round((new Date(checkOutDateInput.value) - new Date(checkInDateInput.value)) / (1000 * 60 * 60 * 24));
                 totalPriceInput.value = (pricePerNight * nights).toFixed(2);
             }
-        });
+    });
     </script>
 
 
