@@ -85,10 +85,16 @@
                             <div class="d-flex align-items-center">
                                 <a href="{{ route('myBookings') }}" class="btn btn-primary rounded-0 py-2 px-md-4 d-block d-lg-inline-block me-2">Bookings <i class="bi bi-calendar2-check ms-3"></i></a>
 
+                                @if(!session('user_id'))
+                                <a href="{{ route('login') }}" class="btn btn-primary rounded-0 py-2 px-md-4 d-block d-lg-inline-block">Login <i class="fa fa-arrow-right ms-3"></i></a>
+                                @else
                                 <a href="{{ route('logout') }}" class="btn btn-primary rounded-0 py-2 px-md-4 d-block d-lg-inline-block" onclick="event.preventDefault(); document.getElementById('front-logout-form').submit();">Logout <i class="fa fa-arrow-right ms-3"></i></a>
+                                @endif
+
                                 <form id="front-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
+
 
                             </div>
                         </div>

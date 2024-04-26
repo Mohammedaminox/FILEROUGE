@@ -14,7 +14,7 @@ use App\Http\Controllers\UserController;
 // auth routes
 // auth routes
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -30,59 +30,64 @@ Route::get('/reset-password{token}', [ForgetPasswordManager::class, 'resetPasswo
 Route::post('/reset-password', [ForgetPasswordManager::class, 'resetPasswordPost'])->name("resetPasswordPost");
 
 
-
-//category routes
-//category routes
-Route::resource('category', CategoryController::class)->only([
-    'index', 'store', 'update', 'destroy'
-]);
-
-
-Route::resource('user', UserController::class)->only([
-    'index','destroy'
-]);
+Route::get('/error-403', function () {
+    return view('errors.notfound');
+})->name('error.403');
 
 
 
-//service routes
-//service routes
-Route::resource('service', ServiceController::class)->only([
-    'index', 'store', 'update', 'destroy'
-]);
 
 
 
-//rooms routes
-//rooms routes
-Route::resource('room', RoomController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::get('/room_details/{id}', [RoomController::class, 'room_details'])->name('room_details');
+// User routes...    // User routes...    // User routes...    // User routes...    // User routes...
+// User routes...    // User routes...    // User routes...    // User routes...    // User routes...
+// User routes...    // User routes...    // User routes...    // User routes...    // User routes...
 
 
-
-//booking routes
-//booking routes
-Route::post('/book_room/{room}', [BookingController::class, 'book'])->name('book');
-Route::get('/booking', [BookingController::class, 'index'])->name('bookings');
-
-Route::get('/profil', [BookingController::class, 'myBookings'])->name('myBookings');
-
-Route::put('/cancel-booking', [BookingController::class, 'cancelBooking'])->name('cancelBooking');
-Route::delete('/booking/{id}', [BookingController::class, 'destroy'])->name('destroy');
-
-
+Route::get('/', function () {
+    return redirect()->route('frontIndex');
+});
 
 Route::get('/hotelier', [RoomController::class, 'frontIndex'])->name('frontIndex');
-Route::get('/rooms', [RoomController::class, 'frontRooms'])->name('frontRooms');
-Route::get('/about', [RoomController::class, 'frontAbout'])->name('frontAbout');
-Route::get('/sevices', [RoomController::class, 'frontServices'])->name('frontServices');
-Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontContact');
 
+Route::get('/room_details/{id}', [RoomController::class, 'room_details'])->name('room_details');
 
+Route::group(['middleware' => 'user'], function () {
 
-Route::get('/Statistique', [StatistiqueController::class, 'Statistique'])->name('Statistique');
+    Route::get('/filter-rooms', [RoomController::class, 'filterRooms'])->name('filter.rooms');
 
-// Route::get('/room_list', [RoomController::class, 'index'])->name('room.list');
-Route::get('/filter-rooms', [RoomController::class, 'filterRooms'])->name('filter.rooms');
+    Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontContact');
 
+    Route::get('/rooms', [RoomController::class, 'frontRooms'])->name('frontRooms');
 
+    Route::get('/about', [RoomController::class, 'frontAbout'])->name('frontAbout');
 
+    Route::get('/sevices', [RoomController::class, 'frontServices'])->name('frontServices');
+
+    Route::get('/profil', [BookingController::class, 'myBookings'])->name('myBookings');
+
+    Route::put('/cancel-booking', [BookingController::class, 'cancelBooking'])->name('cancelBooking');
+
+    Route::post('/book_room/{room}', [BookingController::class, 'book'])->name('book');
+});
+
+// Admin routes...    // Admin routes...    // Admin routes...    // Admin routes...    // Admin routes...
+// Admin routes...    // Admin routes...    // Admin routes...    // Admin routes...    // Admin routes...
+// Admin routes...    // Admin routes...    // Admin routes...    // Admin routes...    // Admin routes...
+
+Route::group(['middleware' => 'admin'], function () {
+
+    Route::resource('category', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::resource('user', UserController::class)->only(['index', 'destroy']);
+
+    Route::resource('service', ServiceController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::resource('room', RoomController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('/booking', [BookingController::class, 'index'])->name('bookings');
+
+    Route::delete('/booking/{id}', [BookingController::class, 'destroy'])->name('destroy');
+
+    Route::get('/Statistique', [StatistiqueController::class, 'Statistique'])->name('Statistique');
+});

@@ -61,7 +61,7 @@ class ForgetPasswordManager extends Controller
 
         // Check if the reset record exists
         if (!$updatePassword) {
-            return redirect('/reset-password{token}')->with("error", "Invalid or expired token.");
+            return redirect('/reset-password{token}')->with("errorToken", "Invalid or expired token.");
         }
 
         // Update the user's password
@@ -70,7 +70,7 @@ class ForgetPasswordManager extends Controller
 
         // Check if the password was successfully updated
         if (!$passwordUpdated) {
-            return redirect('/reset-password{token}')->with("error", "Failed to update password.");
+            return redirect('/reset-password{token}')->with("errorUpdate", "Failed to update password.");
 
         }
 
@@ -79,6 +79,6 @@ class ForgetPasswordManager extends Controller
             ->where("email", $request->email)
             ->delete();
 
-        return redirect('/login')->with("success", "Password reset successfully.");
+        return redirect('/login')->with("successReset", "Password reset successfully.");
     }
 }

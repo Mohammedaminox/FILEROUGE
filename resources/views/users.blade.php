@@ -6,7 +6,11 @@
     <div class="card">
 
 
-
+        @if(session('successDestroy'))
+            <div class="alert alert-success">
+                {{session('successDestroy')}}
+            </div>
+            @endif
         <table class="table table-stripe align-middle mb-0 bg-white">
             <thead class="bg-light">
                 <tr>

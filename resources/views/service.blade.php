@@ -4,6 +4,11 @@
 <!-- Header End -->
 <div class="container-fluid">
     <div class="card">
+        @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
 
         <div class="d-flex justify-content-between align-items-center mb-3" id="header2">
             <div>
@@ -87,7 +92,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <select name="icon_class" class="form-select" id="icon_select">
+                        <select name="icon_class" class="form-select select-with-icons" id="icon_select">
                             @foreach($iconClasses as $iconClass)
                             <option value="{{ $iconClass->class_name }}">{{ $iconClass->class_name }}</option>
                             @endforeach
@@ -104,22 +109,25 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
-        $('#icon_select').select2({
-            templateResult: formatState,
-            escapeMarkup: function(m) {
-                return m;
-            }, // Allows HTML in option text
-            dropdownCssClass: "select2-dropdown-z-index"
-        });
+        initializeSelectWithIcons('.select-with-icons');
+
+        function initializeSelectWithIcons(selector) {
+            $(selector).select2({
+                templateResult: formatState,
+                escapeMarkup: function(m) {
+                    return m;
+                }, // Allows HTML in option text
+                dropdownCssClass: "select2-dropdown-z-index"
+            });
+        }
 
         function formatState(state) {
             if (!state.id) {
                 return state.text;
             }
-            return $('<span><i class="' + state.text + '"></i> ' + state.text + '</span>');
+            return $('<span><i class="' + state.id + '"></i> ' + state.text + '</span>');
         }
     });
 </script>
@@ -151,14 +159,11 @@
                     </div>
 
 
-
                     <div class="mb-3">
-                        <label for="editServiceIcon" class="form-label">Icon Class</label>
-                        <select name="icon_class" id="editServiceIcon" class="form-select">
+                        <select name="icon_class" id="editServiceIcon" class="form-select select-with-icons">
                             @foreach($iconClasses as $iconClass)
-                            <option value="{{ $iconClass->class_name }}">
-                                <i class="{{ $iconClass->class_name }}">ppp</i>
-                            </option>
+                            <option value="{{ $iconClass->class_name }}">{{ $iconClass->class_name }}</option>
+
                             @endforeach
                         </select>
                     </div>

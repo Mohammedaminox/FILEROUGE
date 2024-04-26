@@ -4,7 +4,21 @@
 <!-- Header End -->
 <div class="container-fluid">
     <div class="card">
-
+        @if(session("successStore"))
+        <div class="alert alert-success" role="alert">
+            {{ session("successStore") }}
+        </div>
+        @endif
+        @if(session("successUpdate"))
+        <div class="alert alert-success" role="alert">
+            {{ session("successUpdate") }}
+        </div>
+        @endif
+        @if(session("successDestroy"))
+        <div class="alert alert-success" role="alert">
+            {{ session("successDestroy") }}
+        </div>
+        @endif
         <div class="d-flex justify-content-between align-items-center mb-3" id="header2">
             <div>
                 <button type="button" class="btn btn-primary btn-lg me-2" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Category</button>

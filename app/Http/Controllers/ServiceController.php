@@ -31,11 +31,6 @@ class ServiceController extends Controller
 
     public function update(Request $request, Service $service)
     {
-        // $request->validate([
-        //     'name' => 'required|unique:categories,name,' . $service->id,
-        //     'icon_class' => '',
-
-        // ]);
 
         $service->update($request->all());
 
