@@ -25,6 +25,11 @@
 </head>
 
 <body>
+    @if(session('success'))
+    <div class="alert alert-success" >
+        {{session('success')}}
+    </div>
+    @endif
     <div class="form-gap"></div>
     <div class="container">
         <div class="row">

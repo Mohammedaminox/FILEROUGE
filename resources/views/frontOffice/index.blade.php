@@ -31,12 +31,12 @@
                     <div class="row g-2">
                         <div class="col-md-3">
                             <div class="date" id="date1" data-target-input="nearest">
-                                <input type="date" class="form-control datetimepicker-input" id="start_date" />
+                                <input type="date" class="form-control datetimepicker-input check_in_date" id="start_date" />
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="date" id="date2" data-target-input="nearest">
-                                <input type="date" class="form-control datetimepicker-input" id="end_date" />
+                                <input type="date" class="form-control datetimepicker-input check_out_date" id="end_date" />
                             </div>
                         </div>
                     </div>
@@ -53,29 +53,7 @@
     <!-- Room list will be displayed here -->
 </div>
 
-<script>
-    function filterRooms() {
-        var start_date = document.getElementById('start_date').value;
-        var end_date = document.getElementById('end_date').value;
 
-        // Perform AJAX request to get filtered rooms
-        $.ajax({
-            url: '/filter-rooms',
-            type: 'GET',
-            data: {
-                start_date: start_date,
-                end_date: end_date
-            },
-            success: function(response) {
-                console.log(response);
-                document.getElementById('room_list').innerHTML = response;
-            },
-            error: function(xhr) {
-                console.log(xhr.responseText);
-            }
-        });
-    }
-</script>
 
 
 
@@ -152,7 +130,7 @@
             <h6 class="section-title text-center text-primary text-uppercase">Our Rooms</h6>
             <h1 class="mb-5">Explore Our <span class="text-primary text-uppercase">Rooms</span></h1>
         </div>
-        <div class="row g-4" >
+        <div class="row g-4">
             @foreach ($rooms as $room)
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="room-item shadow rounded overflow-hidden">

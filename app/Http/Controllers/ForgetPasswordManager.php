@@ -30,10 +30,13 @@ class ForgetPasswordManager extends Controller
             'created_at' => Carbon::now()
         ]);
 
+
         Mail::mailer('gmail')->send("emails.reset_password", ['token' => $token], function ($message) use ($request) {
             $message->to($request->email);
             $message->subject("Reset Password");
+            $message->from('aminebenmade@gmail.com@gmail.com', 'hotelier');
         });
+        
 
         return redirect()->to(route("forgetPassword"))->with("success", "we have send email for reset password");
     }

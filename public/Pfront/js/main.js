@@ -107,3 +107,78 @@
     
 })(jQuery);
 
+function filterRooms() {
+    var start_date = document.getElementById('start_date').value;
+    var end_date = document.getElementById('end_date').value;
+
+    // Perform AJAX request to get filtered rooms
+    $.ajax({
+        url: '/filter-rooms',
+        type: 'GET',
+        data: {
+            start_date: start_date,
+            end_date: end_date
+        },
+        success: function(response) {
+            console.log(response);
+            document.getElementById('room_list').innerHTML = response;
+        },
+        error: function(xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+    
+}
+
+$(function() {
+   
+    let today = new Date();
+
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
+
+  
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+  
+    today = yyyy + '-' + mm + '-' + dd;
+
+    
+    $('.check_in_date').attr('min', today);
+    $('.check_out_date').attr('min', today);
+
+   
+    $('.check_in_date').on('change', function() {
+       
+        $('.check_out_date').attr('min', $(this).val());
+       
+        $('.check_out_date').val('');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const checkInDateInput = document.getElementById('check_in_date');
+    const checkOutDateInput = document.getElementById('check_out_date');
+    const totalPriceInput = document.getElementById('total_price');
+    const pricePerNight = document.getElementById('room_price').value;
+
+    checkInDateInput.addEventListener('change', updateTotalPrice);
+    checkOutDateInput.addEventListener('change', updateTotalPrice);
+
+    function updateTotalPrice() {
+        const nights = Math.round((new Date(checkOutDateInput.value) - new Date(checkInDateInput.value)) / (1000 * 60 * 60 * 24));
+        totalPriceInput.value = (pricePerNight * nights).toFixed(2);
+    }
+});
+
+
+
+
+
+

@@ -52,17 +52,19 @@ Route::get('/hotelier', [RoomController::class, 'frontIndex'])->name('frontIndex
 
 Route::get('/room_details/{id}', [RoomController::class, 'room_details'])->name('room_details');
 
+Route::get('/filter-rooms', [RoomController::class, 'filterRooms'])->name('filter.rooms');
+
+Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontContact');
+
+Route::get('/rooms', [RoomController::class, 'frontRooms'])->name('frontRooms');
+
+Route::get('/about', [RoomController::class, 'frontAbout'])->name('frontAbout');
+
+Route::get('/sevices', [RoomController::class, 'frontServices'])->name('frontServices');
+
 Route::group(['middleware' => 'user'], function () {
 
-    Route::get('/filter-rooms', [RoomController::class, 'filterRooms'])->name('filter.rooms');
 
-    Route::get('/contact', [RoomController::class, 'frontContact'])->name('frontContact');
-
-    Route::get('/rooms', [RoomController::class, 'frontRooms'])->name('frontRooms');
-
-    Route::get('/about', [RoomController::class, 'frontAbout'])->name('frontAbout');
-
-    Route::get('/sevices', [RoomController::class, 'frontServices'])->name('frontServices');
 
     Route::get('/profil', [BookingController::class, 'myBookings'])->name('myBookings');
 
